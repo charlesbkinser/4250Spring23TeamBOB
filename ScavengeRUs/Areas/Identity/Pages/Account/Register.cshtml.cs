@@ -125,7 +125,7 @@ namespace ScavengeRUs.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            string defaultPage = "~/Hunt/ViewTasks/0"; // change to "~/" to direct to the Home page after login
+            string defaultPage = "~/Hunt/ViewTasks/20"; // change to "~/" to direct to the Home page after login
             returnUrl = Url.Content(defaultPage);     // id number equal to the hunt page you want to default to
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
