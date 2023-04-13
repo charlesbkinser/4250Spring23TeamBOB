@@ -37,6 +37,8 @@ namespace ScavengeRUs.Controllers
             
             return View();
         }
+
+
         [HttpPost, ActionName("LogIn")]
         public async Task<IActionResult> LogInConfirmed(AccessCode accessCode)
         {
@@ -45,12 +47,13 @@ namespace ScavengeRUs.Controllers
                 return View("Error", new ErrorViewModel() { Text = "Enter a valid access code." }); 
                     
             }
-            var user = await _userRepo.FindByAccessCode(accessCode.Code!);
+            var user = await _userRepo.FindAnyByAccessCode(accessCode.Code!);
             if (user == null)
             {
                 return View("Error", new ErrorViewModel() { Text = "Enter a valid access code." });
             }
             await _signInRepo.SignInAsync(user, false);
+            
             return RedirectToAction("ViewTasks", "Hunt", new {id = user.Hunt.Id}); // change to redirect to view of hunts
         }
         /// <summary>
