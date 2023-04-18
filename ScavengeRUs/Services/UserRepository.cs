@@ -174,6 +174,7 @@ namespace ScavengeRUs.Services
                 await UpdateAsync(username, user);
             }
         }
+
         public async Task<ApplicationUser> FindByAccessCode(string accessCode)
         {
             if (accessCode == null)
@@ -186,5 +187,47 @@ namespace ScavengeRUs.Services
             return user!;
         }
 
+        //Problem with this method: returns a user without a hunt.
+        public async Task<ApplicationUser> FindAnyByAccessCode(string accessCode)
+        {
+            if (accessCode == null)
+            {
+                return null!;
+            }
+
+            //Get the user in the database corresponding to the user's AccessCode.
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.AccessCode!.Code == accessCode);
+
+            //In the release version, access codes could be null for every user.
+            //This section of code mitigates that problem.
+            if(user == null || user.AccessCode == null)
+            {
+                //Split the access code into 2 parts.
+                //Part[0]: The user's phone number.
+                //Part[1]: The hunt name.
+                var stringManipulation = accessCode.Split('/');
+
+                //Get the name of the hunt we're looking for.
+                var huntName = stringManipulation[1];
+
+                //You can use this access code for testing purposes: 9999999999/Hunt1
+                user = await _db.Users.FirstOrDefaultAsync(x => x.PhoneNumber == stringManipulation[0]);
+                user.Hunt = await _db.Hunts.FirstOrDefaultAsync(h => h.HuntName == huntName);
+                /*user.AccessCode = new AccessCode() 
+                {
+                    Id = 0,
+                    Code = accessCode,
+                    HuntId = 0,
+                    Hunt = user.Hunt,
+                    Users = new List<ApplicationUser>()
+                };*/
+            }
+            return user!;
+        }
+
+        /*public async Task<ApplicationUser> FindById(int id) 
+        {
+            
+        }*/
     }
 }
