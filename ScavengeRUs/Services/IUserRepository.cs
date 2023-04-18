@@ -14,5 +14,6 @@ namespace ScavengeRUs.Services
         Task AddUserToHunt(string username, Hunt hunt);
         Task<ApplicationUser> FindByAccessCode(string accessCode);
         Task<ApplicationUser> FindAnyByAccessCode(string accessCode);
+        /*Task<ApplicationUser> FindById(int id);*/
     }
 }
