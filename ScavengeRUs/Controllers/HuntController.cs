@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ScavengeRUs.Models.Entities;
 using ScavengeRUs.Services;
 using Microsoft.AspNetCore.Identity;
+using MessagePack.Formatters;
 
 namespace ScavengeRUs.Controllers
 {
