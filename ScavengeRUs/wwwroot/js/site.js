@@ -217,6 +217,8 @@ sideBarClose.addEventListener('click', e => {
                     setTimeout(() => {
                         createTaskModal.hide();
                     }, 1500);
+                    // Reload the page after success to update the score property.
+                    location.reload(true);
                 }
                 else {
                     $('#failedMessageArea').html("Incorrect! Try again.");
