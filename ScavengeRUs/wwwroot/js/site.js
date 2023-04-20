@@ -206,7 +206,7 @@ sideBarClose.addEventListener('click', e => {
             dataType: "json",
             success: function (response) {
                 if (response.success) {
-                    $('#successMessageArea').html("Success! Task Completed.");
+                    $('#successMessageArea').html("Success! Task Completed. Score +1!");
                     $('#alertAreaSuccess').show();
                     //console.log(formData.taskid);
                     $('a[data-id="' + formData.taskid + '"] #status').text('Completed').css({ "color": "Green" }); //Change text to completed if success
