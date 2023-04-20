@@ -1,9 +1,19 @@
 ﻿@model IEnumerable<ScavengeRUs.Models.Entities.Location>
+@using ScavengeRUs.Models.Entities
 @using Microsoft.AspNetCore.Identity
+@using ScavengeRUs.Services;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject IUserRepository userRepo
 @{
     var hunt = (Hunt?)ViewData["Hunt"];
     ViewData["Title"] = "View Players of hunt";
 }
+
+@{
+    var user = await userRepo.ReadAsync(User.Identity?.Name!);
+}
+
 @{
     var timeRemaining = (hunt!.EndDate - DateTime.Now).ToString();
     if (TimeSpan.Parse(timeRemaining).Seconds < 0)
@@ -157,7 +167,6 @@
 </div>
 
 
-
 @*Sidebar*@
 <button hidden class="btn btn-primary" id="toggleSidebar" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasRight">Toggle right offcanvas</button>
 <div class="button left" id="openSidebar">
@@ -177,7 +186,7 @@
         <p>Players logged in: </p>
         <p>Players invited: @hunt.Players.Count() </p>
         <p>Current rank: </p>
-        <p>Score: </p>
+        <p>Score: @user.Score</p>
         <p>Time remaining: @timeRemaining</p>
     </div>
 </div>
