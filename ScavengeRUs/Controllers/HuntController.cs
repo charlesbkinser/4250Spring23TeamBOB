@@ -54,6 +54,7 @@ namespace ScavengeRUs.Controllers
         {
             if (ModelState.IsValid)
             {
+                hunt.CreationDate = DateTime.Now;
                 await _huntRepo.CreateAsync(hunt);
                 return RedirectToAction("Index");
             }
@@ -239,23 +240,30 @@ namespace ScavengeRUs.Controllers
             }
             
             var tasks = await _huntRepo.GetLocations(hunt.HuntLocations);
-                foreach (var item in tasks)
+            int numTasksCompleted = 0;
+
+            foreach (var item in tasks)
+            {
+                if (currentUser.TasksCompleted.Count() > 0)
                 {
-                    if (currentUser.TasksCompleted.Count() > 0)
+                    var usertask = currentUser.TasksCompleted.FirstOrDefault(a => a.Id == item.Id);
+                    if (usertask != null && tasks.Contains(usertask))
                     {
-                        var usertask = currentUser.TasksCompleted.FirstOrDefault(a => a.Id == item.Id);
-                        if (usertask != null && tasks.Contains(usertask))
-                        {
-                            item.Completed = "Completed";
-                        }
-                    }
-                    else
-                    {
-                        item.Completed = "Not completed";
+                        item.Completed = "Completed";
+                        numTasksCompleted++;
                     }
                 }
+                else
+                {
+                    item.Completed = "Not completed";
+                }
+            }
+            if (currentUser!.Score != numTasksCompleted)
+            {
+                currentUser.Score = numTasksCompleted;
+            }
             return View(tasks);
-            
+
         }
         /// <summary>
         /// This method shows all tasks that can be added to the hunt. Exculding the tasks that are already added
@@ -310,6 +318,22 @@ namespace ScavengeRUs.Controllers
         {
             await _huntRepo.RemoveTaskFromHunt(id, huntid);
             return RedirectToAction("ManageTasks", "Hunt", new {id=huntid});
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult>  Update(int id)
+        {
+            var hunt = await _huntRepo.ReadAsync(id);
+
+            return View(hunt);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult Update(int id, Hunt hunt)
+        {
+            _huntRepo.Update(id, hunt);
+            return RedirectToAction("Index");
         }
     }
 }

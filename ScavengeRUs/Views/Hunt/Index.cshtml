@@ -7,7 +7,7 @@
 <h1>Displaying all hunts</h1>
 
 <p>
-    <a asp-action="Create" style="padding-right: 3px">Create New Hunt</a> |
+    @*<a asp-action="Create" style="padding-right: 3px">Create New Hunt</a> |*@
     <a asp-controller="locations" asp-action="Index" style="padding-right: 3px">Manage All Tasks</a> |
     <a asp-controller="User" asp-action="Manage" style="padding-left: 3px">Back to Admin Portal</a>
 </p>
@@ -17,6 +17,9 @@
 @*            <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.HuntName)
             </th>
@@ -43,7 +46,10 @@
         <tr>
 @*            <td>
                 @Html.DisplayFor(modelItem => item.Id)
-            </td>  *@          
+            </td>  *@   
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDate)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.HuntName)
             </td>
@@ -74,7 +80,7 @@
                 @Html.DisplayFor(modelItem => item.HuntLocations.Count)
             </td>
             <td>
-                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
+                @Html.ActionLink("Edit", "Update", new { id=item.Id }) |
                 @Html.ActionLink("View Hunt", "ViewTasks", new {  id=item.Id  }) |
                 @Html.ActionLink("Delete Hunt", "Delete", new {  id=item.Id  })
             </td>
