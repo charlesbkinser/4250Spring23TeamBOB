@@ -27,16 +27,16 @@
     int getRank()
     {
         int rank = 0;
-        int i = 0;
-        leaderboard = leaderboard.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+        int i = 1;
+        leaderboard = leaderboard.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         foreach (string username in  leaderboard.Keys)
         {
-            i++;
             if (username == user!.UserName)
             {
                 rank = i;
-                Console.WriteLine(username);
-            }   
+                Console.WriteLine("COOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL STUFFF: " + username);
+            }
+            i++;
         }                 
         
         return rank;
