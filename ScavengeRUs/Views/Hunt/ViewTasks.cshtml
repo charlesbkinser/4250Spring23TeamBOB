@@ -12,7 +12,40 @@
 
 @{
     var user = await userRepo.ReadAsync(User.Identity?.Name!);
+
+    // Create a new dictionary to store the usernames and scores of the current hunt's players
+    Dictionary<string, int> leaderboard = new Dictionary<string, int>();
+    foreach (ApplicationUser player in @hunt!.Players)
+    {
+        leaderboard.Add(player.UserName, player.Score);
+    }
 }
+
+@{
+
+    // Sort the leaderboard dictionary to find the current player's rank
+    int getRank()
+    {
+        int rank = 0;
+        int i = 0;
+        leaderboard = leaderboard.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+        foreach (string username in  leaderboard.Keys)
+        {
+            i++;
+            if (username == user!.UserName)
+            {
+                rank = i;
+                Console.WriteLine(username);
+            }   
+        }                 
+        
+        return rank;
+    }
+   
+}
+
+
+    
 
 @{
     var timeRemaining = (hunt!.EndDate - DateTime.Now).ToString();
@@ -183,10 +216,10 @@
 
     <div class="offcanvas-body">
         <p>Total number of tasks: @Model.Count()</p>
-        <p>Players logged in: </p>
+        <p>Players logged in: @hunt.Players.Count</p>
         <p>Players invited: @hunt.Players.Count() </p>
-        <p>Current rank: </p>
-        <p>Score: @user.Score</p>
+        <p>Current rank: @getRank()</p>
+        <p>Score: @user!.Score</p>
         <p>Time remaining: @timeRemaining</p>
     </div>
 </div>
