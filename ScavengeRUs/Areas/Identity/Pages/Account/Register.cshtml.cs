@@ -85,7 +85,7 @@ namespace ScavengeRUs.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [Display(Name ="First Name")]
+            [Display(Name = "First Name")]
             public string FirstName { get; set; } = String.Empty;
 
             [Required]
@@ -125,9 +125,7 @@ namespace ScavengeRUs.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            string defaultPage = "~/Hunt/ViewTasks/20"; // change to "~/" to direct to the Home page after login
-            returnUrl = Url.Content(defaultPage);     // id number equal to the hunt page you want to default to
-
+            returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
@@ -135,7 +133,7 @@ namespace ScavengeRUs.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.PhoneNumber = Input.PhoneNumber;
-                
+
                 var roleCheckPlayer = await _roleManager.RoleExistsAsync("Player");
                 var roleCheckAdmin = await _roleManager.RoleExistsAsync("Admin");
                 if (!roleCheckPlayer && !roleCheckAdmin)

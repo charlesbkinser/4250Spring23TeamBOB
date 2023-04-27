@@ -238,7 +238,7 @@ namespace ScavengeRUs.Controllers
             {
                 return RedirectToAction("Index");
             }
-            
+
             var tasks = await _huntRepo.GetLocations(hunt.HuntLocations);
             int numTasksCompleted = 0;
 

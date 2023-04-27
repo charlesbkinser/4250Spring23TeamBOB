@@ -28,8 +28,7 @@ namespace ScavengeRUs.Models.Entities
         [NotMapped]
         public ICollection<string> Roles { get; set; }
     = new List<string>();
-
-        public int Score { get; set; }
         public Carriers Carrier { get; set; }
+        public int Score { get; set; }
     }
 }
